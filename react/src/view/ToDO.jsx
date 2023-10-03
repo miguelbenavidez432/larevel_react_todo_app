@@ -12,6 +12,8 @@ export default function ToDo() {
     const { currentUser } = UseStateContext();
     const [todos, setTodos] = useState([]);
     const [editing, setEditing] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     const [updateTodo, setUpdateTodo] = useState({
         id: '',
         title: '',
@@ -23,11 +25,12 @@ export default function ToDo() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        axiosClient.get('/todo')
+        axiosClient.get(`/todo?page=${currentPage}`)
             .then(({ data }) => {
                 const todoFiltered = data.data.filter(t => t.id_user === currentUser.id)
-                setTodos(todoFiltered)
+                setTodos(todoFiltered);
                 setUpdateTodo({ ...updateTodo, id_user: currentUser.id });
+                setTotalPages(data.meta.last_page);
             })
 
     }, [])
@@ -45,6 +48,14 @@ export default function ToDo() {
 
             })
     }
+
+    const handleNextPage = () => {
+        setCurrentPage((prevPage) => prevPage + 1);
+    };
+
+    const handlePrevPage = () => {
+        setCurrentPage((prevPage) => prevPage - 1);
+    };
 
 
     const onCompleted = (todo) => {
@@ -77,6 +88,14 @@ export default function ToDo() {
     return (
         <ul role="list" className="divide-y divide-gray-100 mx-8 my-4">
             {todos.map((todo) => (
+            <div>
+                {currentPage > 1 && (
+                    <button className="btn-add" onClick={handlePrevPage}>Página anterior</button>
+                )}&nbsp;&nbsp;
+                {currentPage < totalPages && (
+                    <button className='btn-add' onClick={handleNextPage}>Página siguiente</button>
+                )}
+            </div>
                 <li key={todo.id} className="flex justify-between gap-x-6 py-5">
                     {editing
                         ? <form
