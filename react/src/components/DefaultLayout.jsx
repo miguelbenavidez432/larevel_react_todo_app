@@ -9,7 +9,7 @@ import axiosClient from '../axios'
 const navigation = [
     { name: 'Dashboard', to: '/dashboard' },
     { name: 'To-Do List', to: '/todo-list' },
-    { name: 'Create To-Do', to: '/create-todo' },
+    { name: 'Create To-Do', to: '/create-todo/' },
 ]
 
 function classNames(...classes) {
