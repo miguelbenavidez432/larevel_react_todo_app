@@ -26,8 +26,12 @@ const router = createBrowserRouter([
                 element: <ToDo/>
             },
             {
-                path: '/create-todo',
-                element: <CreateToDo/>
+                path: '/create-todo/new',
+                element: <CreateToDo key='todoCreate'/>
+            },
+            {
+                path: '/create-todo/:id',
+                element: <CreateToDo key='todoUpdate'/>
             },
         ]
     },
